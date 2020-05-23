@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\PostCollection;
 use App\Http\Resources\PostResource;
 use App\Post;
-use Illuminate\Http\Request;
 
 /**
  * Class PostController
@@ -12,6 +12,17 @@ use Illuminate\Http\Request;
  */
 class PostController extends Controller
 {
+    /**
+     * Returns all posts
+     *
+     * @return PostCollection
+     */
+    public function index()
+    {
+        $posts = Post::all();
+        return new PostCollection($posts);
+    }
+
     /**
      * Stores data
      *

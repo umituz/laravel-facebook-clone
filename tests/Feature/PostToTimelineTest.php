@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\User;
+use App\Http\Traits\TestTrait;
 use App\Post;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -14,12 +14,7 @@ use Tests\TestCase;
  */
 class PostToTimelineTest extends TestCase
 {
-    use RefreshDatabase;
-
-    private function user()
-    {
-        return factory(User::class)->create();
-    }
+    use RefreshDatabase, TestTrait;
 
     /**
      * @test
@@ -27,6 +22,7 @@ class PostToTimelineTest extends TestCase
     public function a_user_can_post_a_text_post()
     {
         $user = $this->user();
+
         $this->withoutExceptionHandling();
 
         $this->actingAs($user, 'api');
