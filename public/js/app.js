@@ -1916,6 +1916,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "App",
@@ -37651,7 +37657,26 @@ var render = function() {
   return _c(
     "div",
     { staticClass: "flex flex-col flex-1 h-screen overflow-y-hidden" },
-    [_c("Navbar"), _vm._v(" "), _c("router-view")],
+    [
+      _c("Navbar"),
+      _vm._v(" "),
+      _c("div", { staticClass: "flex overflow-y-hidden flex-1" }, [
+        _c("div", { staticClass: "w-1/3" }, [_vm._v("Sidebar")]),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "overflow-x-hidden w-2/3" },
+          [
+            _c("router-view"),
+            _vm._v(" "),
+            _vm._l(100, function(i) {
+              return _c("p", [_vm._v("tester " + _vm._s(i))])
+            })
+          ],
+          2
+        )
+      ])
+    ],
     1
   )
 }
