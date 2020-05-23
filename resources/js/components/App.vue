@@ -1,13 +1,18 @@
 <template>
-    <div>
-        App.vue
+    <div class="flex flex-col flex-1 h-screen">
+        <Navbar/>
         <router-view></router-view>
     </div>
 </template>
 
 <script>
+    import Navbar from "./Navbar";
+
     export default {
-        name: "App"
+        name: "App",
+        components: {
+            Navbar
+        }
     }
 </script>
 
