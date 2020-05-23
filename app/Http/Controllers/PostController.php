@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\PostCollection;
 use App\Http\Resources\PostResource;
-use App\Post;
 
 /**
  * Class PostController
@@ -19,7 +18,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::all();
+        $posts = request()->user()->posts;
         return new PostCollection($posts);
     }
 

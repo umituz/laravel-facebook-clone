@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Scopes\ReverseScope;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -16,6 +17,13 @@ class Post extends Model
      * @var array
      */
     protected $guarded = [];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope(new ReverseScope());
+    }
 
     /**
      * Returns the user of the post
