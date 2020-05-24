@@ -4,6 +4,9 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreatePostsTable
+ */
 class CreatePostsTable extends Migration
 {
     /**
@@ -18,6 +21,7 @@ class CreatePostsTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->text('body');
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }

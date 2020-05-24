@@ -2121,6 +2121,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Post",
@@ -38188,7 +38190,11 @@ var render = function() {
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "text-sm text-gray-600" }, [
-              _vm._v("15 Mins")
+              _vm._v(
+                "\n                    " +
+                  _vm._s(_vm.post.data.attributes.posted_at) +
+                  "\n                "
+              )
             ])
           ])
         ]),
@@ -38204,7 +38210,14 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
-      _vm._m(0),
+      _vm.post.data.attributes.image
+        ? _c("div", { staticClass: "w-full" }, [
+            _c("img", {
+              staticClass: "w-full",
+              attrs: { src: _vm.post.data.attributes.image, alt: "" }
+            })
+          ])
+        : _vm._e(),
       _vm._v(" "),
       _c(
         "div",
@@ -38328,23 +38341,7 @@ var render = function() {
     ]
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "w-full" }, [
-      _c("img", {
-        staticClass: "w-full",
-        attrs: {
-          src:
-            "https://images.pexels.com/photos/132037/pexels-photo-132037.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-          alt: ""
-        }
-      })
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 

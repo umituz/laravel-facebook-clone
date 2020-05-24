@@ -9,7 +9,9 @@
                     <div class="text-sm font-bold">
                         {{ post.data.attributes.posted_by.data.attributes.name }}
                     </div>
-                    <div class="text-sm text-gray-600">15 Mins</div>
+                    <div class="text-sm text-gray-600">
+                        {{ post.data.attributes.posted_at }}
+                    </div>
                 </div>
             </div>
             <div class="mt-4">
@@ -19,9 +21,9 @@
             </div>
         </div>
 
-        <div class="w-full">
+        <div class="w-full" v-if="post.data.attributes.image">
             <img
-                src="https://images.pexels.com/photos/132037/pexels-photo-132037.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+                :src="post.data.attributes.image"
                 alt=""
                 class="w-full">
         </div>
