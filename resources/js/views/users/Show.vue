@@ -1,31 +1,25 @@
 <template>
-    <div class="flex flex-col items-center py-4">
-        <NewPost/>
-        <p v-if="loading">Loading posts...</p>
-        <Post v-else v-for="post in posts.data" :key="post.data.post_id" :post="post"/>
+    <div>
+        <div class="w-100 h-64 overflow-hidden">
+            <img class="object-cover w-full"
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRGYYnvBcXFLzALx6yk4vnlbnyJeX_y_cgYuPqh969GAmqjrv-r&usqp=CAU" />
+        </div>
     </div>
 </template>
 
 <script>
-    import NewPost from "../components/NewPost";
-    import Post from "../components/Post";
-
     export default {
-        name: "NewsFeed",
-        components: {
-            NewPost,
-            Post
-        },
+        name: "Show",
         data: () => {
             return {
-                posts: null,
+                user: null,
                 loading: true
             }
         },
         mounted() {
-            axios.get('/api/posts')
+            axios.get('/api/users/' + this.$route.params.userId)
                 .then(response => {
-                    this.posts = response.data;
+                    this.user = response.data;
                 })
                 .catch(error => {
                     console.log("Unable to fetch posts : " + error);
