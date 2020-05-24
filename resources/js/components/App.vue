@@ -18,6 +18,9 @@
         name: "App",
         components: {
             Navbar, Sidebar
+        },
+        mounted() {
+            this.$store.dispatch('fetchAuthUser');
         }
     }
 </script>
