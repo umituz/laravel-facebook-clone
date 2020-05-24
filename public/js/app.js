@@ -1999,6 +1999,20 @@ __webpack_require__.r(__webpack_exports__);
   name: "Navbar",
   components: {
     ProfilePhoto: _ProfilePhoto__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
+  data: function data() {
+    return {
+      user: null
+    };
+  },
+  mounted: function mounted() {
+    var _this = this;
+
+    axios.get('/api/auth-user').then(function (response) {
+      _this.user = response.data;
+    })["catch"](function (error) {
+      console.log("Unable to fetch user : " + error);
+    });
   }
 });
 
@@ -38093,7 +38107,7 @@ var render = function() {
             "router-link",
             {
               staticClass: "px-8 h-full flex items-center",
-              attrs: { to: "/" }
+              attrs: { to: "/users/" + _vm.user.data.user_id }
             },
             [_c("ProfilePhoto")],
             1
