@@ -19,7 +19,8 @@ class PostSeeder extends Seeder
         DB::table('posts')->truncate();
 
         DB::table('posts')->insert([
-            ['user_id' => 1, 'body' => 'First very cool post','created_at' => now(),'updated_at' => now()]
+            ['user_id' => 1, 'body' => 'First very cool post','created_at' => now(),'updated_at' => now()],
+            ['user_id' => 1, 'body' => 'Second very cool post','created_at' => now(),'updated_at' => now()],
         ]);
 
         DB::statement('SET FOREIGN_KEY_CHECKS = 1');

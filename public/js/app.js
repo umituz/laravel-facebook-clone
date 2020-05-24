@@ -2117,12 +2117,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Post",
   components: {
     ProfilePhoto: _ProfilePhoto__WEBPACK_IMPORTED_MODULE_0__["default"]
-  }
+  },
+  props: ['post']
 });
 
 /***/ }),
@@ -2194,6 +2199,20 @@ __webpack_require__.r(__webpack_exports__);
   components: {
     NewPost: _components_NewPost__WEBPACK_IMPORTED_MODULE_0__["default"],
     Post: _components_Post__WEBPACK_IMPORTED_MODULE_1__["default"]
+  },
+  data: function data() {
+    return {
+      posts: null
+    };
+  },
+  mounted: function mounted() {
+    var _this = this;
+
+    axios.get('/api/posts').then(function (response) {
+      _this.posts = response.data;
+    })["catch"](function (error) {
+      console.log("Unable to fetch posts : " + error);
+    });
   }
 });
 
@@ -38157,13 +38176,35 @@ var render = function() {
         _c("div", { staticClass: "flex items-center" }, [
           _c("div", { staticClass: "w-8" }, [_c("ProfilePhoto")], 1),
           _vm._v(" "),
-          _vm._m(0)
+          _c("div", { staticClass: "ml-6" }, [
+            _c("div", { staticClass: "text-sm font-bold" }, [
+              _vm._v(
+                "\n                    " +
+                  _vm._s(
+                    _vm.post.data.attributes.posted_by.data.attributes.name
+                  ) +
+                  "\n                "
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "text-sm text-gray-600" }, [
+              _vm._v("15 Mins")
+            ])
+          ])
         ]),
         _vm._v(" "),
-        _vm._m(1)
+        _c("div", { staticClass: "mt-4" }, [
+          _c("p", [
+            _vm._v(
+              "\n                " +
+                _vm._s(_vm.post.data.attributes.body) +
+                "\n            "
+            )
+          ])
+        ])
       ]),
       _vm._v(" "),
-      _vm._m(2),
+      _vm._m(0),
       _vm._v(" "),
       _c(
         "div",
@@ -38292,24 +38333,6 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "ml-6" }, [
-      _c("div", { staticClass: "text-sm font-bold" }, [_vm._v("Name User")]),
-      _vm._v(" "),
-      _c("div", { staticClass: "text-sm text-gray-600" }, [_vm._v("15 Mins")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "mt-4" }, [
-      _c("p", [_vm._v("Not having fun!")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
     return _c("div", { staticClass: "w-full" }, [
       _c("img", {
         staticClass: "w-full",
@@ -38416,8 +38439,14 @@ var render = function() {
   return _c(
     "div",
     { staticClass: "flex flex-col items-center py-4" },
-    [_c("NewPost"), _vm._v(" "), _c("Post")],
-    1
+    [
+      _c("NewPost"),
+      _vm._v(" "),
+      _vm._l(_vm.posts.data, function(post) {
+        return _c("Post", { key: post.data.post_id, attrs: { post: post } })
+      })
+    ],
+    2
   )
 }
 var staticRenderFns = []
