@@ -14,4 +14,9 @@ class Friend extends Model
      * @var array
      */
     protected $guarded = [];
+
+    /**
+     * @var array
+     */
+    protected $dates = ['confirmed_at'];
 }
