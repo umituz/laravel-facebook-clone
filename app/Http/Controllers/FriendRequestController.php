@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\RecordNotFoundException;
+use App\Exceptions\ValidationErrorException;
 use App\Friend;
 use App\Http\Resources\FriendResource;
 use App\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Validation\ValidationException;
 
 /**
  * Class FriendRequestController
@@ -22,12 +24,11 @@ class FriendRequestController extends Controller
     public function store()
     {
         $data = request()->validate([
-            'friend_id' => ''
+            'friend_id' => 'required'
         ]);
 
         try {
             User::findOrFail($data['friend_id'])->friends()->attach(auth()->user());
-
         } catch (ModelNotFoundException $exception) {
             throw new RecordNotFoundException();
         }

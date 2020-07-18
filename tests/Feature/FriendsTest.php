@@ -121,8 +121,8 @@ class FriendsTest extends TestCase
     }
 
     /**
-    * @test
-    */
+     * @test
+     */
     public function only_valid_friend_requests_can_be_accepted()
     {
         $anotherUser = $this->user();
@@ -146,8 +146,8 @@ class FriendsTest extends TestCase
     }
 
     /**
-    * @test
-    */
+     * @test
+     */
     public function only_the_recipient_can_accept_a_friend_request()
     {
         $user = $this->user();
@@ -170,7 +170,7 @@ class FriendsTest extends TestCase
         $friendRequest = Friend::first();
 
         $this->assertNull($friendRequest->confirmed_at);
-        $this->assertEquals(0,$friendRequest->status);
+        $this->assertEquals(0, $friendRequest->status);
 
         $response->assertJson([
             'errors' => [
@@ -179,5 +179,23 @@ class FriendsTest extends TestCase
                 'detail' => 'Unable to locate the record with the given information'
             ]
         ]);
+    }
+
+    /**
+     * @test
+     */
+    public function friend_id_is_required_for_friend_requests()
+    {
+        $user = $this->user();
+        $response = $this->actingAs($user, 'api')
+            ->post('/api/friend-request', [
+            'friend_id' => ''
+        ])
+//            ->assertStatus( 422)
+        ;
+
+        $responseString = json_decode($response->getContent(),true);
+
+        $this->assertArrayHasKey('friend_id',$responseString['errors']['meta']);
     }
 }
