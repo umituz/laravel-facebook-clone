@@ -19,4 +19,22 @@ class Friend extends Model
      * @var array
      */
     protected $dates = ['confirmed_at'];
+
+    /**
+     * Returns friendship via the given user id
+     *
+     * @param $userId
+     * @return mixed
+     */
+    public static function friendship($userId)
+    {
+        return (new static())
+            ->where(function ($query) use ($userId) {
+                return $query->where('user_id', auth()->id())->where('friend_id', $userId);
+            })
+            ->orWhere(function ($query) use ($userId) {
+                return $query->where('friend_id', auth()->id())->where('user_id', $userId);
+            })
+            ->first();
+    }
 }

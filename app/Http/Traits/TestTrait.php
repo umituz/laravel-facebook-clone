@@ -19,4 +19,14 @@ trait TestTrait
     {
         return factory(User::class)->create();
     }
+
+    /**
+     * @return $this
+     */
+    public function act()
+    {
+        $user = $this->user();
+        $this->actingAs($user, 'api');
+        return $this;
+    }
 }
