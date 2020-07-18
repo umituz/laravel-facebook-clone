@@ -14,6 +14,12 @@ use Illuminate\Http\Request;
  */
 class FriendRequestResponseController extends Controller
 {
+    /**
+     * Store record
+     *
+     * @return FriendResource
+     * @throws RecordNotFoundException
+     */
     public function store()
     {
         $data = request()->validate([
@@ -35,5 +41,23 @@ class FriendRequestResponseController extends Controller
         $friendRequest->update($data);
 
         return new FriendResource($friendRequest);
+    }
+
+    public function destroy()
+    {
+        $data = request()->validate([
+            'user_id' => 'required'
+        ]);
+
+        try {
+            Friend::where([
+                'user_id' => $data['user_id'],
+                'friend_id' => auth()->id()
+            ])->firstOrFail()->delete();
+        } catch (ModelNotFoundException $exception) {
+            throw new RecordNotFoundException();
+        }
+
+        return response()->json([], 204);
     }
 }
