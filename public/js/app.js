@@ -2297,6 +2297,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2323,7 +2327,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     });
   },
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])({
-    user: 'user'
+    user: 'user',
+    friendButtonText: 'friendButtonText'
   }))
 });
 
@@ -38553,7 +38558,38 @@ var render = function() {
           ]
         ),
         _vm._v(" "),
-        _vm._m(2)
+        _c(
+          "div",
+          {
+            staticClass:
+              "absolute flex items-center bottom-0 right-0 mb-4 mr-12 z-20"
+          },
+          [
+            _vm.friendButtonText
+              ? _c(
+                  "button",
+                  {
+                    staticClass: "py-1 px-3 bg-gray-400 rounded",
+                    on: {
+                      click: function($event) {
+                        return _vm.$store.dispatch(
+                          "sendFriendRequest",
+                          _vm.$route.params.userId
+                        )
+                      }
+                    }
+                  },
+                  [
+                    _vm._v(
+                      "\n                " +
+                        _vm._s(_vm.friendButtonText) +
+                        "\n            "
+                    )
+                  ]
+                )
+              : _vm._e()
+          ]
+        )
       ]),
       _vm._v(" "),
       _vm.postLoading
@@ -38600,23 +38636,6 @@ var staticRenderFns = [
         }
       })
     ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      {
-        staticClass:
-          "absolute flex items-center bottom-0 right-0 mb-4 mr-12 z-20"
-      },
-      [
-        _c("button", { staticClass: "py-1 px-3 bg-gray-400 rounded" }, [
-          _vm._v("Add Friend")
-        ])
-      ]
-    )
   }
 ]
 render._withStripped = true
@@ -55650,24 +55669,54 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__
 __webpack_require__.r(__webpack_exports__);
 var state = {
   user: null,
-  userStatus: null
+  userStatus: null,
+  friendButtonText: null
 };
 var getters = {
   user: function user(state) {
     return state.user;
+  },
+  friendship: function friendship(state) {
+    return state.user.data.attributes.friendship;
+  },
+  friendButtonText: function friendButtonText(state) {
+    return state.friendButtonText;
   }
 };
 var actions = {
   fetchUser: function fetchUser(_ref, userId) {
     var commit = _ref.commit,
-        state = _ref.state;
+        dispatch = _ref.dispatch;
     commit('setUserStatus', 'loading');
     axios.get('/api/users/' + userId).then(function (response) {
       commit('setUser', response.data);
       commit('setUserStatus', 'success');
+      dispatch('setFriendButton');
     })["catch"](function (error) {
       commit('setUserStatus', 'error');
     });
+  },
+  sendFriendRequest: function sendFriendRequest(_ref2, friendId) {
+    var commit = _ref2.commit,
+        state = _ref2.state;
+    commit('setButtonText', 'Loading');
+    axios.post('/api/friend-request', {
+      'friend_id': friendId
+    }).then(function (response) {
+      commit('setButtonText', 'Pending Friend Request');
+    })["catch"](function (error) {
+      commit('setButtonText', 'Add Friend');
+    });
+  },
+  setFriendButton: function setFriendButton(_ref3) {
+    var commit = _ref3.commit,
+        getters = _ref3.getters;
+
+    if (getters.friendship === null) {
+      commit('setButtonText', 'Add Friend');
+    } else if (getters.friendship.data.attributes.confirmed_at === null) {
+      commit('setButtonText', 'Pending Friend Request');
+    } else {}
   }
 };
 var mutations = {
@@ -55676,6 +55725,9 @@ var mutations = {
   },
   setUserStatus: function setUserStatus(state, status) {
     state.userStatus = status;
+  },
+  setButtonText: function setButtonText(state, text) {
+    state.friendButtonText = text;
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = ({
