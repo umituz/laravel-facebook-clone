@@ -83,8 +83,6 @@ class FriendsTest extends TestCase
      */
     public function friend_requests_can_be_accepted()
     {
-        $this->withoutExceptionHandling();
-
         $user = $this->user();
         $this->actingAs($user, 'api');
 
@@ -98,7 +96,7 @@ class FriendsTest extends TestCase
             ->post('/api/friend-request-response', [
                 'user_id' => $user->id,
                 'status' => 1
-            ]);
+            ])->assertStatus(200);
 
         $friendRequest = Friend::first();
 
@@ -120,5 +118,66 @@ class FriendsTest extends TestCase
             ]
         ]);
 
+    }
+
+    /**
+    * @test
+    */
+    public function only_valid_friend_requests_can_be_accepted()
+    {
+        $anotherUser = $this->user();
+
+        $response = $this->actingAs($anotherUser, 'api')
+            ->post('/api/friend-request-response', [
+                'user_id' => 123,
+                'status' => 1
+            ])->assertStatus(404);
+
+        $friendRequest = Friend::first();
+
+        $response->assertJson([
+            'errors' => [
+                'code' => 404,
+                'title' => 'Record Not Found',
+                'detail' => 'Unable to locate the record with the given information'
+            ]
+        ]);
+
+    }
+
+    /**
+    * @test
+    */
+    public function only_the_recipient_can_accept_a_friend_request()
+    {
+        $user = $this->user();
+        $this->actingAs($user, 'api');
+
+        $anotherUser = $this->user();
+
+        $this->post('/api/friend-request', [
+            'friend_id' => $anotherUser->id
+        ])->assertStatus(200);
+
+        $differentUser = $this->user();
+
+        $response = $this->actingAs($differentUser, 'api')
+            ->post('/api/friend-request-response', [
+                'user_id' => $user->id,
+                'status' => 1
+            ])->assertStatus(404);
+
+        $friendRequest = Friend::first();
+
+        $this->assertNull($friendRequest->confirmed_at);
+        $this->assertEquals(0,$friendRequest->status);
+
+        $response->assertJson([
+            'errors' => [
+                'code' => 404,
+                'title' => 'Record Not Found',
+                'detail' => 'Unable to locate the record with the given information'
+            ]
+        ]);
     }
 }
