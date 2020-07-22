@@ -55669,8 +55669,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__
 __webpack_require__.r(__webpack_exports__);
 var state = {
   user: null,
-  userStatus: null,
-  friendButtonText: null
+  userStatus: null
 };
 var getters = {
   user: function user(state) {
@@ -55679,8 +55678,12 @@ var getters = {
   friendship: function friendship(state) {
     return state.user.data.attributes.friendship;
   },
-  friendButtonText: function friendButtonText(state) {
-    return state.friendButtonText;
+  friendButtonText: function friendButtonText(state, getters, rootState) {
+    if (getters.friendship === null) {
+      return 'Add Friend';
+    } else if (getters.friendship.data.attributes.confirmed_at === null) {
+      return 'Pending Friend Request';
+    } else {}
   }
 };
 var actions = {
@@ -55691,7 +55694,6 @@ var actions = {
     axios.get('/api/users/' + userId).then(function (response) {
       commit('setUser', response.data);
       commit('setUserStatus', 'success');
-      dispatch('setFriendButton');
     })["catch"](function (error) {
       commit('setUserStatus', 'error');
     });
@@ -55703,25 +55705,16 @@ var actions = {
     axios.post('/api/friend-request', {
       'friend_id': friendId
     }).then(function (response) {
-      commit('setButtonText', 'Pending Friend Request');
-    })["catch"](function (error) {
-      commit('setButtonText', 'Add Friend');
-    });
-  },
-  setFriendButton: function setFriendButton(_ref3) {
-    var commit = _ref3.commit,
-        getters = _ref3.getters;
-
-    if (getters.friendship === null) {
-      commit('setButtonText', 'Add Friend');
-    } else if (getters.friendship.data.attributes.confirmed_at === null) {
-      commit('setButtonText', 'Pending Friend Request');
-    } else {}
+      commit('setUserFriendship', response.data);
+    })["catch"](function (error) {});
   }
 };
 var mutations = {
   setUser: function setUser(state, user) {
     state.user = user;
+  },
+  setUserFriendship: function setUserFriendship(state, friendship) {
+    state.user.data.attributes.friendship = friendship;
   },
   setUserStatus: function setUserStatus(state, status) {
     state.userStatus = status;
