@@ -2,10 +2,10 @@
 
 namespace Tests\Feature;
 
+use App\Friend;
 use App\Http\Traits\TestTrait;
 use App\Post;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 /**
@@ -25,9 +25,18 @@ class RetrievePostsTest extends TestCase
 
         $user = $this->user();
 
+        $anotherUser = $this->user();
+
         $this->actingAs($user, 'api');
 
-        $posts = factory(Post::class, 2)->create(['user_id' => $user->id]);
+        $posts = factory(Post::class, 2)->create(['user_id' => $anotherUser->id]);
+
+        Friend::create([
+            'user_id' => $user->id,
+            'friend_id' => $anotherUser->id,
+            'status' => 1,
+            'confirmed_at' => now()
+        ]);
 
         $response = $this->get('/api/posts');
 
