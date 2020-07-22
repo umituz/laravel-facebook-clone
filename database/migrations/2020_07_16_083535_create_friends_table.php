@@ -23,6 +23,8 @@ class CreateFriendsTable extends Migration
             $table->boolean('status')->default(false);
             $table->timestamp('confirmed_at')->nullable();
             $table->timestamps();
+
+            $table->unique(['user_id', 'friend_id']);
         });
     }
 
